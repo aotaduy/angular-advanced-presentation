@@ -141,42 +141,163 @@ dist/
 							<li>htmlhint</li>
 						</ul>
 						<p>
-							configure the rules for each project
+							configure the rules for each project, add githooks if the team is large
 						</p>
 					</section>
+                    <section>
+                        <h2>Exercise</h2>
+                        <p>Create a set of gulp tasks that creates in the folder dist/</p>
+                    </p>
+                    a) a minified js file for all angular files excluding tests,
+                    from the src dir in <a href="https://github.com/aotaduy/angular-example">angular-example</a>.
+                    <p>
+                        <p>
+                            b) Create another set that lints all files and if all files pass validation create a file for each angular component
+                            type, filters, directives, controllers, etc. and other for a concatenated css file.
+
+                        </p>
+
+                        For both create an apropiate index.html file that runs the scripts.
+                    </p>
+                    </section>
                 </section>
                 <section>
-                <h2>Style Guides</h2>
-                    <ul>
-                        <li>Uniformity</li>
-                        <li>Source of truth for code review</li>
-                        <li>Improve readability</li>
 
-                    </ul>
+
+                <section>
+                <h2>Style Guides</h2>
+                    <div >
+                        <ul>
+                            <li>Uniformity</li>
+                            <li>Source of truth for code review</li>
+                            <li>Improve readability</li>
+
+                        </ul>
+
+                    </div><br>
+                    <div>
+                        <a href="https://github.com/johnpapa/angular-styleguide/blob/master/a1/README.md">John Papa</a> -
+                        <a href="https://github.com/toddmotto/angular-styleguide"> Tod motto </a> -
+                        <a href="https://docs.google.com/document/d/1XXMvReO8-Awi1EZXAXS4PzDzdNvV6pGcuaF4Q9821Es/pub"> Google </a>
+
+                    </div>
+                </section>
+                <section>
+                    <h3>Important Patterns</h3>
                     <ul>
-                        <li>
-                            <a href="https://github.com/johnpapa/angular-styleguide/blob/master/a1/README.md">John Papa </a> </li>
-                        <li><a href="https://github.com/toddmotto/angular-styleguide"> Tod motto </a></li>
-                        <li><a href="https://docs.google.com/document/d/1XXMvReO8-Awi1EZXAXS4PzDzdNvV6pGcuaF4Q9821Es/pub"> Google </a></li>
+                        <li><a href="https://github.com/johnpapa/angular-styleguide/tree/master/a1#style-y024">Named Functions over Anonymous</a></li>
+                        <li><a href="https://github.com/johnpapa/angular-styleguide/tree/master/a1#style-y033">Bindable Members Up Top</a></li>
+                        <li><a href="https://github.com/johnpapa/angular-styleguide/tree/master/a1#style-y001">Single Responsibility</a><a href="https://github.com/johnpapa/angular-styleguide/tree/master/a1#style-y070">Directive</a></li>
+                        <li><a href="https://github.com/johnpapa/angular-styleguide/tree/master/a1#style-y032">vm capture var</a></li>
+                        <li><a href="https://github.com/johnpapa/angular-styleguide/tree/master/a1#style-y035">Defer Controller Logic to Services</a></li>
+                        <li><a href="https://github.com/johnpapa/angular-styleguide/tree/master/a1#style-y060">Separate Data calls</a></li>
+                        <li><a href="https://github.com/johnpapa/angular-styleguide/tree/master/a1#style-y061">Return a promise</a></li>
                     </ul>
                 </section>
-				<section>
-                <h2>Exercise</h2>
-                    <p>Create a set of gulp tasks that creates in the folder dist/</p>
-				</p>
-				a) a minified js file for all angular files excluding tests,
-				from the src dir in <a href="https://github.com/aotaduy/angular-example"></a>.
-					<p>
-						<p>
-							b) Create another set that lints all files and if all files pass validation create a file for each angular component
-							type, filters, directives, controllers, etc. and other for a concatenated css file.
-							
-						</p>
+                <section data-markdown>
+                	<script type="text/template">
+                        ### Bindable Members Up Top
+                        ###### [Style [Y033](#style-y033)]
 
-						For both create an apropiate index.html file that runs the scripts.
+                          - Place bindable members at the top of the controller, alphabetized, and not spread through the controller code.
 
+                          ```javascript
+                          /* avoid */
+                          function SessionsController() {
+                              var vm = this;
+
+                              vm.gotoSession = function() {
+                                /* ... */
+                              };
+                              vm.refresh = function() {
+                                /* ... */
+                              };
+                              vm.search = function() {
+                                /* ... */
+                              };
+                              vm.sessions = [];
+                              vm.title = 'Sessions';
+                          }
+                          ```
+                	</script>
+                </section>
+
+                <section data-markdown>
+                	<script type="text/template">
+                        ### Bindable Members Up Top
+ *Why?*: Placing bindable members at the top makes it easy to read and to identify which members  can be used in the View.
+                          ```javascript
+                          /* recommended */
+                          function SessionsController() {
+                              var vm = this;
+
+                              vm.gotoSession = gotoSession;
+                              vm.refresh = refresh;
+                              vm.search = search;
+                              vm.sessions = [];
+                              vm.title = 'Sessions';
+
+                              ////////////
+
+                              function gotoSession() {
+                                /* */
+                              }
+
+                              function refresh() {
+                                /* */
+                              }
+
+                              function search() {
+                                /* */
+                              }
+                          }
+                          ```
+                	</script>
+                </section>
+
+                <section data-markdown>
+                	<script type="text/template">
+                    ### Named vs Anonymous Functions [[Y024](#style-y024)]
+
+                      - Use named functions instead of assigning an  anonymous.
+
+
+                      ```javascript
+                      /* avoid */
+                      angular
+                          .module('app')
+                          .controller('DashboardController', function() { })
+                          .factory('logger', function() { });
+                      ```
+
+                      ```javascript
+                      /* recommended */
+
+                      // dashboard.js
+                      angular
+                          .module('app')
+                          .controller('DashboardController', DashboardController);
+
+                      function DashboardController() { }
+                      ```
+
+                      ```javascript
+                      // logger.js
+                      angular
+                          .module('app')
+                          .factory('logger', logger);
+
+                      function logger() { }
+                      ```
+                	</script>
+                </section>
+                <section>
+                    <h3>Exercise</h3>
+                    <p>
+                        Refactor the app xxx into a main module and a set of submodules by feature using the main patterns present on the style guide.
                     </p>
                 </section>
+				</section>
             </div>
         </div>
 
