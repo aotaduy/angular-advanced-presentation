@@ -1,50 +1,202 @@
 <!doctype html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<title>reveal.js</title>
+        <title>reveal.js</title>
 
-		<link rel="stylesheet" href="css/reveal.css">
-		<link rel="stylesheet" href="css/theme/black.css">
+        <link rel="stylesheet" href="css/reveal.css">
+        <link rel="stylesheet" href="css/theme/simple.css">
+        <link rel="stylesheet" href="css/presentation.css">
 
-		<!-- Theme used for syntax highlighting of code -->
-		<link rel="stylesheet" href="lib/css/zenburn.css">
+        <!-- Theme used for syntax highlighting of code -->
+        <link rel="stylesheet" href="lib/css/zenburn.css">
 
-		<!-- Printing and PDF exports -->
-		<script>
-			var link = document.createElement( 'link' );
-			link.rel = 'stylesheet';
-			link.type = 'text/css';
-			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
-			document.getElementsByTagName( 'head' )[0].appendChild( link );
-		</script>
-	</head>
-	<body>
-		<div class="reveal">
-			<div class="slides">
-				<section>Slide 1</section>
-				<section>Slide 2</section>
-			</div>
-		</div>
+        <!-- Printing and PDF exports -->
+        <script>
+            var link = document.createElement( 'link' );
+            link.rel = 'stylesheet';
+            link.type = 'text/css';
+            link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+            document.getElementsByTagName( 'head' )[0].appendChild( link );
+        </script>
+    </head>
+    <body>
+        <div class="reveal">
+            <div class="slides">
+                <section>
+                    <h1>Angular Advanced</h1>
+                    <h2>Velocity Partners</h2>
+                    <h2>Educacion IT</h2>
+                    <h4>Andres Otaduy</h4>
+                </section>
 
-		<script src="lib/js/head.min.js"></script>
-		<script src="js/reveal.js"></script>
+                <section>
+                <h2>Structure of a project</h2>
+                <p>
+                    Feature/Route based hirearchy vs component type hierarchy
+                </p>
+                <p>
+                    File names: name.type<b>.js</b> ie: movies.controller.js
+                </p>
+                Unit tests name.type<b>.spec.js</b> movies.controller.spec.js
+                7
+                </section>
+                <section>
+                    <section>
+                        <h2>Use a build process</h2>
+                        <ul>
+                            <li>Separate dev from deploy </li>
+                            <li>Minify and optimize html, css, js</li>
+                            <li>Lint and check format </li>
+                            <li>Automate tasks (deploy, test,)</li>
+                            <li>Use githooks</li>
 
-		<script>
-			// More info https://github.com/hakimel/reveal.js#configuration
-			Reveal.initialize({
-				history: true,
+                        </ul>
+                        <div>
+                            <img src="img/gulp.png" height="250" >
+                            <img src="img/grunt.png" height="250">
+                        </div>
+                    </section>
+                    <section>
+                        <h2>Separate dev from deploy</h2>
+                        <h3 class="code">dev</h3>
 
-				// More info https://github.com/hakimel/reveal.js#dependencies
-				dependencies: [
-					{ src: 'plugin/markdown/marked.js' },
-					{ src: 'plugin/markdown/markdown.js' },
-					{ src: 'plugin/notes/notes.js', async: true },
-					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
-				]
-			});
-		</script>
-	</body>
+                        <div class="">
+                            <div class="column-2">
+                                <pre>
+app/
+    app.module.js
+    app.config.js
+    components/
+        calendar.directive.js
+        calendar.directive.html
+        user-profile.directive.js
+        user-profile.directive.html
+    layout/
+        shell.html
+        shell.controller.js
+        topnav.html
+        topnav.controller.js
+    sessions/
+        sessions.html
+        sessions.controller.js
+        sessions.routes.js
+        session-detail.html
+        session-detail.controller.js
+    </pre>
+
+
+
+                            </div>
+                            <div class="column-2">
+<pre>
+people/
+    attendees.html
+    attendees.controller.js
+    people.routes.js
+    speakers.html
+    speakers.controller.js
+    speaker-detail.html
+    speaker-detail.controller.js
+services/
+    data.service.js
+    localstorage.service.js
+    logger.service.js
+    spinner.service.js
+</pre>
+                            </div>
+                        </div>
+                    </section>
+                    <section>
+                        <h2>Separate dev from deploy</h2>
+                        <h3 class="code">deploy</h3>
+                                <pre>
+dist/
+    index.html
+    js/
+        app094hgt.min.js
+        vendor065htui.min.js
+    css/
+        app465rte.min.css
+        vendor543rte.min.css
+    </pre>
+                    </section>
+					<section>
+						<h2>Minify and Optimize</h2>
+						<ul>
+							<li>uglify</li>
+							<li>babel</li>
+							<li>postcss autoprefixer</li>
+							<li>postcss usedcss</li>
+							<li>huge etc...</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Linting</h2>
+						<ul>
+							<li>eslint, jshint, jscs</li>
+							<li>csslint</li>
+							<li>htmlhint</li>
+						</ul>
+						<p>
+							configure the rules for each project
+						</p>
+					</section>
+                </section>
+                <section>
+                <h2>Style Guides</h2>
+                    <ul>
+                        <li>Uniformity</li>
+                        <li>Source of truth for code review</li>
+                        <li>Improve readability</li>
+
+                    </ul>
+                    <ul>
+                        <li>
+                            <a href="https://github.com/johnpapa/angular-styleguide/blob/master/a1/README.md">John Papa </a> </li>
+                        <li><a href="https://github.com/toddmotto/angular-styleguide"> Tod motto </a></li>
+                        <li><a href="https://docs.google.com/document/d/1XXMvReO8-Awi1EZXAXS4PzDzdNvV6pGcuaF4Q9821Es/pub"> Google </a></li>
+                    </ul>
+                </section>
+				<section>
+                <h2>Exercise</h2>
+                    <p>Create a set of gulp tasks that creates in the folder dist/</p>
+				</p>
+				a) a minified js file for all angular files excluding tests,
+				from the src dir in <a href="https://github.com/aotaduy/angular-example"></a>.
+					<p>
+						<p>
+							b) Create another set that lints all files and if all files pass validation create a file for each angular component
+							type, filters, directives, controllers, etc. and other for a concatenated css file.
+							
+						</p>
+
+						For both create an apropiate index.html file that runs the scripts.
+
+                    </p>
+                </section>
+            </div>
+        </div>
+
+        <script src="lib/js/head.min.js"></script>
+        <script src="js/reveal.js"></script>
+
+        <script>
+            // More info https://github.com/hakimel/reveal.js#configuration
+            Reveal.initialize({
+                history: true,
+                center: false,
+
+                // More info https://github.com/hakimel/reveal.js#dependencies
+                dependencies: [
+                    { src: 'plugin/markdown/marked.js' },
+                    { src: 'plugin/markdown/markdown.js' },
+                    { src: 'plugin/notes/notes.js', async: true },
+                    { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+                ]
+            });
+        </script>
+    </body>
 </html>
