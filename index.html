@@ -1,3 +1,4 @@
+e
 <!doctype html>
 <html>
     <head>
@@ -298,6 +299,67 @@ dist/
                     </p>
                 </section>
 				</section>
+                <section>
+                <section>
+
+                        <img src="img/protractor-logo.png" alt="Protractor end to end testing for angularJs" />
+                        <ul>
+                            <li>Runs in a real browser</li>
+                            <li>Use native events as a Real user</li>
+                            <li>Automatic Waiting</li>
+                            <li>BDD Style by default</li>
+                        </ul>
+                </section>
+                <section data-markdown>
+                    <script type="text/template">
+                    ###Simple Installation
+                    Install packages
+                    ```bash
+                    npm install -g protractor
+                    webdriver-manager update
+                    webdriver-manager start
+                    ```
+                    Create ``config.js`` file
+                    ```javascript
+                    // conf.js
+                    exports.config = {
+                      framework: 'jasmine',
+                      seleniumAddress: 'http://localhost:4444/wd/hub',
+                      specs: ['spec.js']
+                    }
+                    ```
+                    </script>
+                </section>
+                <section data-markdown>
+                    <script type="text/template">
+                    ###BDD Test
+                    ```javascript
+                    // spec.js
+                    describe('Protractor ', function() {        // Suite
+                      beforeEach(function() {                   // Setup
+                        browser.get('http://juliemr.github.io/protractor-demo/');
+                      });
+
+                      it('should start in zero', function() {   // Spec
+
+                        expect(element(by.binding('latest')).getText()).
+                            toEqual('0');                 // Expectation
+                      });
+
+                      it('should add one and two', function() {
+                        element(by.model('first')).sendKeys(1);
+                        element(by.model('second')).sendKeys(2);
+
+                        element(by.id('gobutton')).click();
+
+                        expect(element(by.binding('latest')).getText()).
+                            toEqual('5'); // This is wrong!
+                      });
+                    });
+                    ```
+                    </script>
+                </section>
+                </section>
             </div>
         </div>
 
