@@ -359,6 +359,55 @@ dist/
                     ```
                     </script>
                 </section>
+                <section data-markdown>
+                    <script type="text/template">
+                    ###Locators
+                    ####Template
+                    ```html
+                    <input type="text" ng-model="username"/>
+                    <p>{{person.name}}</p>
+                    <div ng-repeat="item in items"><span>...</span></div>
+                    <select ng-model="color" ng-options="c for c in colors"> </select>
+                    ```
+                    #### Protractor specific Locators
+                    ```javascript
+                    by.model('username');
+                    by.binding('person.name')
+                    by.repeater('item in vm.items');
+                    by.options('c for c in colors');
+                    ```
+                    #### Inherited from Webdriver
+                    ```javascript
+                    by.className('a-class'); by.css('.css .selector');
+                    by.id('an-id'); by.tagName('a');
+                    ```
+                    </script>
+
+                </section>
+
+                <section data-markdown>
+                    <script type="text/template">
+                    ###Actions
+
+                    ```js
+                    var el = element(locator);
+
+                    // Click on the element
+                    el.click();
+
+                    // Send keys to the element (usually an input)
+                    el.sendKeys('my text');
+
+                    // Clear the text in an element (usually an input)
+                    el.clear();
+
+                    // Get the value of an attribute, for example value
+                    el.getAttribute('value');
+                    ```
+                    </script>
+
+                </section>
+
                 </section>
             </div>
         </div>
