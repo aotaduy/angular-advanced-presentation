@@ -1,14 +1,14 @@
-e
+
 <!doctype html>
 <html>
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-        <title>reveal.js</title>
+        <title>Angular Advanced</title>
 
         <link rel="stylesheet" href="css/reveal.css">
-        <link rel="stylesheet" href="css/theme/simple.css">
+        <link rel="stylesheet" href="css/theme/white.css">
         <link rel="stylesheet" href="css/presentation.css">
 
         <!-- Theme used for syntax highlighting of code -->
@@ -28,21 +28,55 @@ e
             <div class="slides">
                 <section>
                     <h1>Angular Advanced</h1>
-                    <h2>Velocity Partners</h2>
                     <h2>Educacion IT</h2>
-                    <h4>Andres Otaduy</h4>
+                    <h4>Ing. Andres Otaduy</h4>
+                </section>
+
+                <section data-markdown>
+                  <script type="text/template">
+                    ## Installation
+                    install git https://git-scm.com/downloads
+
+                    For Linux - Mac OSX
+                    Install nvm (Node Version Manager)
+                    https://github.com/creationix/nvm
+
+                    ````
+                    nvm install 6
+                    ````
+                    For Windows
+                    You can use:
+                    https://github.com/hakobera/nvmw
+                    and then
+                    ````
+                    nvm install 6
+                    ````
+                    Clone:
+                    ````
+                    git clone https://github.com/aotaduy/angular-phonecat-14.git
+                    git clone https://github.com/aotaduy/angular-example.git
+                    On each directory
+                    npm install
+                    ````
+
+                  </script>
                 </section>
 
                 <section>
                 <h2>Structure of a project</h2>
-                <p>
-                    Feature/Route based hirearchy vs component type hierarchy
-                </p>
-                <p>
+                <ul>
+                  <li>
+                    Feature based hirearchy vs component type hierarchy
+                  </li>
+                  <li>
                     File names: name.type<b>.js</b> ie: movies.controller.js
-                </p>
-                Unit tests name.type<b>.spec.js</b> movies.controller.spec.js
-                7
+                  </li>
+                  <li>
+                    Unit tests name.type<b>.spec.js</b> movies.controller.spec.js
+
+                  </li>
+
+                </ul>
                 </section>
                 <section>
                     <section>
@@ -72,14 +106,14 @@ app/
     app.config.js
     components/
         calendar.directive.js
-        calendar.directive.html
         user-profile.directive.js
         user-profile.directive.html
     layout/
         shell.html
         shell.controller.js
-        topnav.html
+        shell.controller.spec.js
         topnav.controller.js
+        topnav.controller.spec.js
     sessions/
         sessions.html
         sessions.controller.js
@@ -101,6 +135,7 @@ people/
     speakers.controller.js
     speaker-detail.html
     speaker-detail.controller.js
+    people.e2e.spec.js
 services/
     data.service.js
     localstorage.service.js
@@ -145,102 +180,21 @@ dist/
 							configure the rules for each project, add githooks if the team is large
 						</p>
 					</section>
-                    <section data-markdown>
-                        <script type="text/template">
-                            ## Gulp.js
-                            Install
-                            ```sh
-                            $ npm install --global gulp-cli
-                            ```
-                            Install gulp in your project devDependencies:
-
-                            ```sh
-                            $ npm install --save-dev gulp
-                            ```
-                            Create a `gulpfile.js` at the root of your project:
-
-                            ```js
-                            var gulp = require('gulp');
-
-                            gulp.task('default', function() {
-                              // place code for your default task here
-                            });
-                            ```
-                            Run gulp:
-                            ```sh
-                            $ gulp
-                            ```
-                        </script>
-                    </section>
-                    <section data-markdown>
-                        <script type="text/template">
-                            ## Gulp.js example
-                            ```js
-                            var concat = require('gulp-concat');
-
-                            gulp.task('scripts', function() {
-                              return gulp.src('./lib/*.js')
-                                .pipe(concat('all.js'))
-                                .pipe(gulp.dest('./dist/'));
-                            });
-                            ```
-                            - `gulp.src(globs[, options])` Returns a [stream](http://nodejs.org/api/stream.html) of [Vinyl files](https://github.com/gulpjs/vinyl-fs)
-                            that can be [piped](http://nodejs.org/api/stream.html#stream_readable_pipe_destination_options)
-                            to plugins.
-                            - `gulp.dest(path[, options])` it will write files. Re-emits all data passed.
-                            -  `readable.pipe(destination[, options])` it will pipe contents and path of fles
-                        </script>
-                    </section>
-                    <section data-markdown>
-                        <script type="text/template">
-                            ## Gulp.js tasks
-                            gulp.task(name [, deps] [, fn])
-                            ```js
-                            gulp.task('somename', function() {
-                              // Do stuff
-                            });
-                            ```
-                            ```js
-                            gulp.task('mytask', ['array', 'of', 'task', 'names'], function() {
-                              // Do stuff after tasks on array are completed
-                            });
-                            ```
-                            ```js
-                            gulp.task('build', ['array', 'of', 'task', 'names']);
-                            // The tasks will run in parallel (all at once).
-                            ```
-                            ```js
-                            gulp.task('buildStuff', function() {
-                              // Do something that "builds stuff"
-                              var stream = gulp.src(/*some source path*/)
-                              .pipe(somePlugin())
-                              .pipe(someOtherPlugin())
-                              .pipe(gulp.dest(/*some destination*/));
-
-                              return stream;
-                              });
-                            ```
-                        </script>
-                    </section>
                     <section>
                         <h2>Exercise</h2>
                         <p>Create a set of gulp tasks that creates in the folder dist/</p>
+
+                    a) a minified js file for all angular files excluding tests,
+                    from the src dir in <a href="https://github.com/aotaduy/angular-example">angular-example</a>.
+                    <p>
+                        <p>
+                            b) Create another set that lints all files and if all files pass validation create a file for each angular component
+                            type, filters, directives, controllers, etc. and other for a concatenated css file.
+
+                        </p>
+
+                        For both create an apropiate index.html file that runs the scripts.
                     </p>
-                    <ul>
-                        <li>
-                            a) a folder named `dist/templates` with all template html files and structure,
-                            from the src dir in <a href="https://github.com/aotaduy/angular-example">angular-example</a>.
-                        </li>
-                        <li>
-                            b) a concatenated js file "app.dev.js" for all js files excluding tests,
-                            from the src dir in the same repo
-                            use gulp-concat
-                        </li>
-                        <li>
-                            c) a minified js file with the contents of all files excluding tests from the src dir in the same repo
-                            use gulp-uglify
-                        </li>
-                    </ul>
                     </section>
                 </section>
                 <section>
@@ -267,15 +221,54 @@ dist/
                 <section>
                     <h3>Important Patterns</h3>
                     <ul>
-                        <li><a href="https://github.com/johnpapa/angular-styleguide/tree/master/a1#style-y024">Named Functions over Anonymous</a></li>
-                        <li><a href="https://github.com/johnpapa/angular-styleguide/tree/master/a1#style-y033">Bindable Members Up Top</a></li>
-                        <li><a href="https://github.com/johnpapa/angular-styleguide/tree/master/a1#style-y001">Single Responsibility</a><a href="https://github.com/johnpapa/angular-styleguide/tree/master/a1#style-y070">Directive</a></li>
-                        <li><a href="https://github.com/johnpapa/angular-styleguide/tree/master/a1#style-y032">vm capture var</a></li>
-                        <li><a href="https://github.com/johnpapa/angular-styleguide/tree/master/a1#style-y035">Defer Controller Logic to Services</a></li>
-                        <li><a href="https://github.com/johnpapa/angular-styleguide/tree/master/a1#style-y060">Separate Data calls</a></li>
-                        <li><a href="https://github.com/johnpapa/angular-styleguide/tree/master/a1#style-y061">Return a promise</a></li>
+                      <li><a href="https://github.com/johnpapa/angular-styleguide/tree/master/a1#style-y001">Single Responsibility</a></li>
+                      <li><a href="https://github.com/johnpapa/angular-styleguide/tree/master/a1#style-y010">IIFE</a></li>
+                      <li><a href="https://github.com/johnpapa/angular-styleguide/tree/master/a1#style-y024">Named Functions over Anonymous</a></li>
+                      <li><a href="https://github.com/johnpapa/angular-styleguide/tree/master/a1#style-y033">Bindable Members Up Top</a></li>
+                      <li><a href="https://github.com/johnpapa/angular-styleguide/tree/master/a1#style-y070">Directive</a></li>
+                      <li><a href="https://github.com/johnpapa/angular-styleguide/tree/master/a1#style-y032">vm capture var</a></li>
+                      <li><a href="https://github.com/johnpapa/angular-styleguide/tree/master/a1#style-y035">Defer Controller Logic to Services</a></li>
+                      <li><a href="https://github.com/johnpapa/angular-styleguide/tree/master/a1#style-y060">Separate Data calls</a></li>
+                      <li><a href="https://github.com/johnpapa/angular-styleguide/tree/master/a1#style-y061">Return a promise</a></li>
                     </ul>
                 </section>
+                <section data-markdown>
+                  <script type="text/template">
+                    ### Named vs Anonymous Functions [[Y024](#style-y024)]
+
+                      - Use named functions instead of assigning an  anonymous.
+
+
+                      ```javascript
+                      /* avoid */
+                      angular
+                          .module('app')
+                          .controller('DashboardController', function() { })
+                          .factory('logger', function() { });
+                      ```
+
+                      ```javascript
+                      /* recommended */
+
+                      // dashboard.js
+                      angular
+                          .module('app')
+                          .controller('DashboardController', DashboardController);
+
+                      function DashboardController() { }
+                      ```
+
+                      ```javascript
+                      // logger.js
+                      angular
+                          .module('app')
+                          .factory('logger', logger);
+
+                      function logger() { }
+                      ```
+                  </script>
+                </section>
+
                 <section data-markdown>
                 	<script type="text/template">
                         ### Bindable Members Up Top
@@ -337,46 +330,11 @@ dist/
                 	</script>
                 </section>
 
-                <section data-markdown>
-                	<script type="text/template">
-                    ### Named vs Anonymous Functions [[Y024](#style-y024)]
 
-                      - Use named functions instead of assigning an  anonymous.
-
-
-                      ```javascript
-                      /* avoid */
-                      angular
-                          .module('app')
-                          .controller('DashboardController', function() { })
-                          .factory('logger', function() { });
-                      ```
-
-                      ```javascript
-                      /* recommended */
-
-                      // dashboard.js
-                      angular
-                          .module('app')
-                          .controller('DashboardController', DashboardController);
-
-                      function DashboardController() { }
-                      ```
-
-                      ```javascript
-                      // logger.js
-                      angular
-                          .module('app')
-                          .factory('logger', logger);
-
-                      function logger() { }
-                      ```
-                	</script>
-                </section>
                 <section>
                     <h3>Exercise</h3>
                     <p>
-                        Refactor the app <a href="https://github.com/aotaduy/angular-phonecat-14">angular-phonecat</a> a main module and a set of submodules by feature using the main patterns present on the style guide.
+                        Refactor the app <a href="https://github.com/aotaduy/angular-phonecat-14.git">https://github.com/aotaduy/angular-phonecat-14.git</a> into a main module and a set of submodules by feature using the main patterns present on the style guide.
                     </p>
                 </section>
 				</section>
@@ -488,7 +446,15 @@ dist/
                     </script>
 
                 </section>
-
+                <section>
+                  <h2>Exercise</h2>
+                  Using <a href="https://github.com/aotaduy/angular-phonecat-14">https://github.com/aotaduy/angular-phonecat-14 </a>
+                  <ul>
+                    <li>Create More Expectations for the list, empty case, different phone filter, tablet filter</li>
+                    <li>Create a test wich clicks the last link for a dell phone and clicks the link using a binding locator</li>
+                    <li>Create a test wich clicks all of the links for tablets</li>
+                  </ul>
+                </section>
                 </section>
             </div>
         </div>
