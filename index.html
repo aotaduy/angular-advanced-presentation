@@ -181,22 +181,103 @@ dist/
 							configure the rules for each project, add githooks if the team is large
 						</p>
 					</section>
-                    <section>
-                        <h2>Exercise</h2>
-                        <p>Create a set of gulp tasks that creates in the folder dist/</p>
+          <section data-markdown>
+              <script type="text/template">
+                  ## Gulp.js
+                  Install
+                  ```sh
+                  $ npm install --global gulp-cli
+                  ```
+                  Install gulp in your project devDependencies:
 
-                    a) a minified js file for all angular files excluding tests,
-                    from the src dir in <a href="https://github.com/aotaduy/angular-example">angular-example</a>.
-                    <p>
-                        <p>
-                            b) Create another set that lints all files and if all files pass validation create a file for each angular component
-                            type, filters, directives, controllers, etc. and other for a concatenated css file.
+                  ```sh
+                  $ npm install --save-dev gulp
+                  ```
+                  Create a `gulpfile.js` at the root of your project:
 
-                        </p>
+                  ```js
+                  var gulp = require('gulp');
 
-                        For both create an apropiate index.html file that runs the scripts.
-                    </p>
-                    </section>
+                  gulp.task('default', function() {
+                    // place code for your default task here
+                  });
+                  ```
+                  Run gulp:
+                  ```sh
+                  $ gulp
+                  ```
+              </script>
+          </section>
+          <section data-markdown>
+              <script type="text/template">
+                  ## Gulp.js example
+                  ```js
+                  var concat = require('gulp-concat');
+
+                  gulp.task('scripts', function() {
+                    return gulp.src('./lib/*.js')
+                      .pipe(concat('all.js'))
+                      .pipe(gulp.dest('./dist/'));
+                  });
+                  ```
+                  - `gulp.src(globs[, options])` Returns a [stream](http://nodejs.org/api/stream.html) of [Vinyl files](https://github.com/gulpjs/vinyl-fs)
+                  that can be [piped](http://nodejs.org/api/stream.html#stream_readable_pipe_destination_options)
+                  to plugins.
+                  - `gulp.dest(path[, options])` it will write files. Re-emits all data passed.
+                  -  `readable.pipe(destination[, options])` it will pipe contents and path of fles
+              </script>
+          </section>
+          <section data-markdown>
+              <script type="text/template">
+                  ## Gulp.js tasks
+                  gulp.task(name [, deps] [, fn])
+                  ```js
+                  gulp.task('somename', function() {
+                    // Do stuff
+                  });
+                  ```
+                  ```js
+                  gulp.task('mytask', ['array', 'of', 'task', 'names'], function() {
+                    // Do stuff after tasks on array are completed
+                  });
+                  ```
+                  ```js
+                  gulp.task('build', ['array', 'of', 'task', 'names']);
+                  // The tasks will run in parallel (all at once).
+                  ```
+                  ```js
+                  gulp.task('buildStuff', function() {
+                    // Do something that "builds stuff"
+                    var stream = gulp.src(/*some source path*/)
+                    .pipe(somePlugin())
+                    .pipe(someOtherPlugin())
+                    .pipe(gulp.dest(/*some destination*/));
+
+                    return stream;
+                    });
+                  ```
+              </script>
+          </section>
+          <section>
+              <h2>Exercise</h2>
+              <p>Create a set of gulp tasks that creates in the folder dist/
+          </p>
+          <ul>
+              <li>
+                  a) a folder named `dist/templates` with all template html files and structure,
+                  from the src dir in <a href="https://github.com/aotaduy/angular-example">angular-example</a>.
+              </li>
+              <li>
+                  b) a concatenated js file "app.dev.js" for all js files excluding tests,
+                  from the src dir in the same repo
+                  use gulp-concat
+              </li>
+              <li>
+                  c) a minified js file with the contents of all files excluding tests from the src dir in the same repo
+                  use gulp-uglify
+              </li>
+          </ul>
+          </section>
                 </section>
                 <section>
 
