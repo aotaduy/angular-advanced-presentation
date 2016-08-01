@@ -541,6 +541,111 @@ dist/
                   </ul>
                 </section>
                 </section>
+                <section>
+                  <section>
+                    <h1>UI Router</h1>
+                    <ul>
+                      <li>Nested states and Views</li>
+                      <li>Multiple  Named Views</li>
+                      <li>Resolves</li>
+                      <li>Custom Data</li>
+                      <li>Better URL parameter support</li>
+                      <li>URL Rules service</li>
+                    </ul>
+                  </section>
+                  <section>
+                    <h1>Components</h1>
+                    <img src="img/stateDiagram.png" alt="" width="80%"/>
+                    <small>  $stateProvider / $state
+                      ui-sref
+                      ui-view
+                      $urlRouter / $urlRouterProvider</small>
+                  </section>
+
+                  <section>
+                    <h1>Basics</h1>
+                        template, templateUrl
+                        resolve
+                        custom-data, $stateParams
+                      <pre>
+                        <code class="javascript">
+  $stateProvider
+    .state('movie-page', {
+        title: 'Movie',
+        url: '/movie/:movieId',
+        templateUrl: 'app/pages/movie/movie-page.html',
+        controller: 'MoviePageController',
+        controllerAs: 'movieVm',
+        resolve: {
+            movie: ['$stateParams', 'moviesConnector',
+                function($stateParams, moviesConnector) {
+                  var id = $stateParams.movieId;
+                    return moviesConnector.movieInfo(id)
+                      .then(function (response) {
+                          return response.data;
+                      });
+                    }]
+                  }
+                });
+              </code>
+                      </pre>
+                  </section>
+                  <section data-markdown>
+                    <script type="text/template">
+                    # State Parameters
+                    Some examples
+                    ```javascript
+                    url: "/contacts/:contactId" // $stateParams.contactId
+
+                    url: "/contacts/{contactId}" // Same as above
+
+                    url: '/user/{id:int}' // id as integer
+
+                    url: '/user/{id:[0-9a-fA-F]{1,8}}' // RegExp
+
+                    url: "/contacts?myParam1&myParam2" // $stateParams.myParam1
+                    ```
+                  </script>
+                  </section>
+                  <section>
+                    <h1>Events</h1>
+                    <ul>
+                      <li>$stateChangeStart</li>
+                      <li>$stateChangeEnd</li>
+                      <li>$stateChangeError</li>
+                      <li>event, fromState, toState, paramters</li>
+                      <li><code>event.preventDefault()</code> to stop transition</li>
+                    </ul>
+                  </section>
+                  <section>
+                    <h1>Handle Errors</h1>
+                    Set up an event handler early in your project.
+                  </section>
+                  <section>
+                    <h1>Handle Auth</h1>
+                  </section>
+                  <section>
+                    <h1>Exercise</h1>
+                    <p>
+                      Create a search page with an input for the search string, and controls for the order of results (asc, desc) of the results.
+                      Search string should be part of the url and ordering should be a queryString parameter.
+                      A user should be able to get the same resluts by copy and pasting the link in another browser.
+                    </p>
+                    <p>
+                      Create a new page for the login route. Add the events to protect the movies details page with the login.
+                      Save the login state in a mock service that logs in any user with a number on his password.
+                    </p>
+                  </section>
+                  <section>
+                    <h1>Nested States</h1>
+
+                  </section>
+                  <section>
+                    <h1>Multiple Views</h1>
+                  </section>
+
+              </section>
+
             </div>
         </div>
 
