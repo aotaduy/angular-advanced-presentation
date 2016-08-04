@@ -590,6 +590,26 @@ dist/
               </code>
                       </pre>
                   </section>
+                  <section>
+                    <h1>Basic API</h1>
+                    <ul>
+                      <li>$stateProvider.state(name, {})</li>
+                      <li>$state.go(state, params, {location: true, reload:false, notify:true})</li>
+                      <li>$state.get</li>
+                      <li>urlRouterProvider</li>
+                      <li>ui-view ui-sref</li>
+                    </ul>
+                  </section>
+                  <section>
+                    <h1>Example</h1>
+                    <h3>
+                      Add a NowPlaying page.
+                    </h3>
+                    <p>
+                      Add a page that shows the movies being played from /api/movies/playing using a resolve to get the data.
+                      component <code>moviesConnector</code> has the method that retrives this data.
+                    </p>
+                  </section>
                   <section data-markdown>
                     <script type="text/template">
                     # State Parameters
@@ -618,11 +638,42 @@ dist/
                     </ul>
                   </section>
                   <section>
-                    <h1>Handle Errors</h1>
-                    Set up an event handler early in your project.
+                    <h1>Techniques</h1>
+                    <h3>Scope CSS</h3>
+                    <p>
+                      Adding a class corresponding to the state name you can scope css
+                    </p>
+                    <h3>Handle Errors</h3>
+                    <ul>
+                      <li>Set up an event handler early in your project.</li>
+                      <li>Create a redirectTo mechanism</li>
+                    </ul>
                   </section>
                   <section>
-                    <h1>Handle Auth</h1>
+                    <h1>Techniques</h1>
+                    <h3>Handle Auth and login</h3>
+                      <p>
+                        Intercept events to protect pages from access.
+                      </p>
+                      <pre>
+                        <code class="javascript">
+$rootScope.$on('$stateChangeStart', function(e, to) {
+  if (!to.forceLogin) return;
+  if (!isLoggedIn($currentUser)) {
+    e.preventDefault();
+    // Optionally set option.notify to false if you don't want
+    // to retrigger another $stateChangeStart event
+    $state.go(result.to, result.params, {notify: false});
+  }
+                        </code>
+                      </pre>
+                  </section>
+                  <section>
+                    <h1>Excercise</h1>
+                    <p>
+                      Add an ordering option (asc, desc) and ordering field (title, release_date, vote_average) to simple search view in <a href="https://github.com/aotaduy/angular-example">angular-example</a>.
+to control the order of the query. This parameter shold persist in the query string to allow deeplinking of search results.
+                    </p>
                   </section>
                   <section>
                     <h1>Exercise</h1>
@@ -637,13 +688,54 @@ dist/
                     </p>
                   </section>
                   <section>
-                    <h1>Nested States</h1>
-
+                    <h1>Url handling</h1>
+                    <ul>
+                      <li>urlRouterProvider</li>
+                      <li>when(what, String|Function) ret: false|String|true</li>
+                      <li>otherwise(String|Function)</li>
+                      <li>rule(Function) ret: Set the url</li>
+                    </ul>
                   </section>
                   <section>
-                    <h1>Multiple Views</h1>
+                    <h1>Nested States</h1>
+                    <ul>
+                      <li>Parent Child relationship</li>
+                      <li>Inherit resolves and custom data</li>
+                      <li>Prefix Url</li>
+                      <li>Abstract States</li>
+                      <li>Creation via dot notation or parent property</li>
+                      <li>Parent must exist</li>
+                      <li>Scope inheritance</li>
+                    </ul>
                   </section>
+                  <section>
+                    <h1>Abstract States</h1>
+                    <ul>
+                      <li>To prepend a <a href="https://github.com/angular-ui/ui-router/wiki/URL-Routing#url-routing-for-nested-states"><code>url</code></a> to all child state urls.</li>
+                      <li>To insert a <a href="https://github.com/angular-ui/ui-router/wiki#templates"><code>template</code></a> with its own <code>ui-view(s)</code> that its child states will populate.
 
+                      </li>
+                      <li>To <a href="https://github.com/angular-ui/ui-router/wiki/Nested-States-%26-Nested-Views#inherited-resolved-dependencies">provide resolved dependencies</a> via <code>resolve</code>.</li>
+                      <li>To <a href="https://github.com/angular-ui/ui-router/wiki/Nested-States-%26-Nested-Views#inherited-custom-data">provide inherited custom data</a> via <code>data</code> .</li>
+                      <li>To run an <code>onEnter</code> or <code>onExit</code> function that may modify the application in someway.</li>
+                      <li>Any combination of the above.</li>
+                      </ul>
+                  </section>
+                  <section>
+                    <h1>Multiple Named Views</h1>
+                    <ul>
+                      <li>Allows multiple views place holders in a template</li>
+                      <li>Uses views property in the state</li>
+                    </ul>
+                  </section>
+                  <section>
+                    <h1>Exercise</h1>
+                    <p>
+                      Create a page that shows a movie header with the title and poster, and three tabs.
+                      one with the overview of the movie, release date, and basic data. Other with the similar movies, and another with a list of genres.
+                      Page should receive the id as a parameter and if the user clicks in a movie poster should navigate to that movie in the same page.
+                    </p>
+                  </section>
               </section>
 
             </div>
