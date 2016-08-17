@@ -1194,7 +1194,159 @@ Example
               </section>
 
             </section>
+            <section>
+              <section>
+                <h1>Angular Unit Testing</h1>
+                <p>
+                  Angular is a framework conceived with testeability in mind.
+                </p>
+                <ul>
+                  <li>Separation of Concerns</li>
+                  <li>Dependency injection</li>
+                  <li>angular-mocks</li>
+                  <li>karma</li>
+                </ul>
+              </section>
+              <section>
+                <h1>angular-mocks</h1>
+                <p>
+                  A module that facilitates mocking in unit tests.
+                </p>
+                <ul>
+                  <li>angular.mock.module</li>
+                  <li>angular.mock.inject</li>
+                </ul>
+              </section>
+              <section>
+                <h1>module()</h1>
+                <ul>
+                  <li>called with a string</li>
+                  <li>called with a <code>function($provide){}</code></li>
+                  <li>called with <code>{value: value}</code></li>
+                </ul>
+                <pre><code class="js">describe('MyApp', function() {
 
+  // You need to load modules that you want to test,
+  // it loads only the "ng" module by default.
+  beforeEach(module('myApplicationModule'));
+  module(function($provide) {
+        $provide.value('version', 'overridden'); // override version here
+      });
+    });
+</code></pre>
+              </section>
+              <section>
+                <h1>inject()</h1>
+                <p>
+                  injects components into the function parameter
+                </p>
+                <pre><code class="js">var myService;
+
+// Wrap the parameter in underscores
+beforeEach( inject( function(_myService_){
+  myService = _myService_;
+}));
+
+// Use myService in a series of tests.
+it('makes use of myService', function() {
+  myService.doStuff();
+});</code></pre>
+              </section>
+              <section>
+                <h1>$httpBackend</h1>
+              </section>
+              <section>
+                <h1>tzDate</h1>
+              </section>
+              <section>
+                <h1>Mocha Chai Sinon</h1>
+                <img src="img/mocja.svg" height="150px" alt="" /> <img src="img/chai-logo.png"  height="150px" alt="" />
+                <pre><code class="js">describe('Array', function() {
+  describe('#indexOf()', function() {
+    it('should return -1 when the value is not present', function() {
+      assert.equal(-1, [1,2,3].indexOf(4));
+    });
+  });
+});</code>
+                </pre>
+              </section>
+              <section>
+                <h1> Chai </h1>
+                <pre><code class="js">//BDD Should
+foo.should.be.a('string');
+foo.should.equal('bar');
+foo.should.have.length(3);
+tea.should.have.property('flavors')
+  .with.length(3);</code></pre>
+  <pre><code class="js">//BDD Expect expect(foo).to.be.a('string');
+expect(foo).to.equal('bar');
+expect(foo).to.have.length(3);
+expect(tea).to.have.property('flavors')
+.with.length(3);</code></pre>
+                <pre><code class="js">//Assert
+assert.typeOf(foo, 'string');
+assert.equal(foo, 'bar');
+assert.lengthOf(foo, 3)
+assert.property(tea, 'flavors');
+assert.lengthOf(tea.flavors, 3);</code></pre>
+              </section>
+              <section>
+                <h1>Chai Chains</h1>
+                <p>Only for readibility:
+                  <code class="js">to be
+  been is that which and has have with at of same
+</code>
+                </p>
+                <pre><code class="js">//BDD Expect expect(foo).to.be.a('string');
+expect(foo).to.be.equal.to('bar');
+expect(foo).to.have.same.length(3);
+expect(tea).to.have.a.property('flavors').with.length(3);
+expect(tea).to.have.been.equal('flavors').and.have.a.length.of(3);
+</code></pre>
+              </section>
+              <section>
+                <h1>Sinon</h1>
+                <ul>
+                  <li>spies</li>
+                  <li>stubs</li>
+                </ul>
+              </section>
+              <section>
+                <h1>Env Setup</h1>
+                <pre><code>
+npm install -g karma-cli
+npm install karma-mocha karma-chrome-launcher karma-phantomjs-launcher --save-dev
+                </code>
+                </pre>
+                <p>
+                  Create karma.conf.js in the root of your project
+                </p>
+                <pre><code class="js">// karma.conf.js
+module.exports = function(config) {
+  config.set({
+    frameworks: ['mocha'],
+
+    files: [
+      '*.js'
+    ],
+
+    client: {
+      mocha: {
+        // change Karma's debug.html to the mocha web reporter
+        reporter: 'html',
+
+        // require specific files after Mocha is initialized
+        require: [require.resolve('bdd-lazy-var/bdd_lazy_var_global')],
+
+        // custom ui, defined in required file above
+        ui: 'bdd-lazy-var/global',
+      }
+    }
+  });
+};</code>
+                </pre>
+              </section>
+            </section>
             </div>
         </div>
 
