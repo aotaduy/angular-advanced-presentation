@@ -737,6 +737,463 @@ to control the order of the query. This parameter shold persist in the query str
                     </p>
                   </section>
               </section>
+              <section>
+                <section>
+                  <h1>Angular Directives</h1>
+                  <ul>
+                    <li>$compile $digest cycle</li>
+                    <li>Directive Definition Object Details</li>
+                    <li>Components</li>
+                    <li>Transclussion</li>
+                    <li>Performance</li>
+                    <li>Memory Leaks</li>
+                    <li>Decorators</li>
+                  </ul>
+                </section>
+                <section>
+                  <h1>$compile cycle</h1>
+                  <img class="column2" src="img/compile.png" height="300px" alt="" />
+
+                  <ul class="column-2">
+                    <li>Traverse DOM : list of directives</li>
+                    <li>sort Directives by priority</li>
+                    <li>compile each directive: get link functions</li>
+                    <li>Link each directive: set watchers, and register listeners</li>
+                  </ul>
+                  <p>
+                    $digest will run at least once, and
+                  </p>
+
+                </section>
+
+                <section>
+                    <h1>$apply cycle</h1>
+                    <ul class="column-2">
+                      <li>On interaction $apply()</li>
+                      <li>Call $digest: run over watch list for dirty</li>
+                      <li>Check if dirty restart $digest</li>
+                      <li>Repaint browser</li>
+                    </ul>
+                    <img src="img/apply.png" alt="" class="column-2"/>
+
+                    <p>
+                      At least once, tops 10.
+                    </p>
+                </section>
+
+                <section>
+                  <h1>Directives in detail</h1>
+                  <ul>
+                    <li>Replacing</li>
+                    <li>Linking </li>
+                    <li>Compiling </li>
+                    <li>Transclussion</li>
+                  </ul>
+                </section>
+                <section>
+                  <h1>Directive Types</h1>
+                  <ul>
+                    <li>Element</li>
+                    <li>Atribute</li>
+                    <li>Class</li>
+                    <li>Comment</li>
+                  </ul>
+                  <pre>
+                    <code class="html">
+<ng-bind></ng-bind>
+<span ng-bind="exp"></span>
+<span class="ng-bind: exp;"></span>
+<!-- directive: ng-bind exp -->
+
+</code>
+                  </pre>
+                </section>
+                <section>
+                  <h1>Replacing directives</h1>
+                  <pre>
+                    <code class="javascript">
+.directive('creditCardSelector', function () {
+          return {
+              restrict: 'E',
+              scope: {
+                  cards: '=', // Array of cards
+                  selectedCard: '=?', // Current selected card
+                  removeAction: '&?', // Callback action
+                  showRemove: '=?' // Boolean to show delete card button
+              },
+              templateUrl: 'templates/components/creditCardSelector/creditCardSelector.html',
+              controller: 'CreditCardSelectorController',
+              controllerAs: 'creditCardSelectorVm',
+              bindToController: true
+          };
+      });
+                    </code>
+                  </pre>
+                </section>
+                <section>
+                  <h1>Linking Directives</h1>
+                  <p>
+                    define a link: function or object.
+                  </p>
+                  <pre>
+                    <code class="javascript">
+  var NG_HIDE_CLASS = 'ng-hide';
+  var NG_HIDE_IN_PROGRESS_CLASS = 'ng-hide-animate';
+  ngShowDirective = ['$animate', function($animate) {
+    return {
+      restrict: 'A',
+      multiElement: true,
+      link: function(scope, element, attr) {
+        scope.$watch(attr.ngShow, function ngShowWatchAction(value) {
+          $animate[value ? 'removeClass' : 'addClass'](element, NG_HIDE_CLASS, {
+            tempClasses: NG_HIDE_IN_PROGRESS_CLASS
+          });
+        });
+      }
+    };
+  }];
+</code>
+                  </pre>
+                </section>
+                <section>
+                  <h1>Compiling Directives</h1>
+                  <p>
+                    When need to add new directives to the DOM.
+                  </p>
+                  <pre>
+                    <code>
+    .directive("directiveName",function () {
+      return {
+        controller: function() {
+          // controller code here...
+        },
+        compile: {
+
+          // compile code here...
+
+          return {
+
+            pre: function() {
+              // pre-link code here...
+            },
+
+            post: function() {
+              // post-link code here...
+            }
+          };
+        }
+      }
+    })</code>
+                  </pre>
+                </section>
+                <section>
+                  <h1>Execution Order</h1>
+                  <img src="img/execution-order.png" alt="" />
+                  <small>image from toptal blog, eric w. greene</small>
+                </section>
+                <section>
+                  <h1>Exercise</h1>
+                  <p>
+                    Create an atribute directive <code>deletable</code> that adds a delete button to the top left of any block element. And triggers an event $deleted when done.
+                  </p>
+                  <p>
+                    hint: Use the compile function.
+                  </p>
+                  <p>
+                    Test your directive in an ng-repeat loop.
+                  </p>
+                </section>
+                <section>
+                  <h1>Transclusion directives</h1>
+                  <p>
+                    Wrap arbitrary content
+                  </p>
+                  <ul>
+                    <li>
+                      <ul>
+                        <li>Single ngTransclude</li>
+                        <li>Multislot</li>
+                      </ul>
+                    </li>
+                    <li>Transclusion function</li>
+                  </ul>
+                </section>
+                <section>
+                  <h1>Performance digest cycle</h1>
+                  <ul>
+                    <li>binding to functions</li>
+                    <li>watch entire objects</li>
+                    <li>long lists</li>
+                    <li>complex filters</li>
+                    <li>one time binding <code>{{::}}</code></li>
+                  </ul>
+                </section>
+                <section>
+                  <h1>Performance DOM manipulation</h1>
+                  <ul>
+                    <li>track by in ng repeat</li>
+                    <li>ng-if vs ng-show</li>
+                    <li>compile vs link</li>
+                    <li>preLink vs postLink</li>
+                  </ul>
+                </section>
+
+
+              </section>
+              <section>
+
+              <section>
+                <h1>Tunning HTTP Connections</h1>
+                <ul>
+                  <li>Promises</li>
+                  <li>Caching</li>
+                  <li>Headers</li>
+                  <li>Transformation</li>
+                  <li>Interceptors</li>
+                </ul>
+              </section>
+              <section>
+                <h1>Promises</h1>
+                <p>
+                  On Object with three states, pending, fullfilled, resolved. Representing a future value.
+                </p>
+                <pre><code class="js">
+function(aPromise, $q) {
+  aPromise
+    .then(successCallback, errorCallback)
+    .catch(errorCallback)
+    .finally(finallyCallback);
+  rejected = $q.reject();
+  resolved = $q.when();
+  newPromise = $q.all([rejected, resolved, aPromise]);
+  newPromise = $q.race([rejected, resolved, aPromise]);
+  //Create promises
+  deferred = $q.defer();
+  deferred.resolve(aValue);
+  deferred.reject(aValue);
+  return deferred.promise;
+}</code></pre>
+                <p>
+                  <a href="http://taoofcode.net/promise-anti-patterns/"> antipatterns</a>
+
+                </p>
+              </section>
+              <section>
+                <h1>Anti-patterns</h1>
+                <pre><code class="js">
+function anAsyncCall() {
+    var promise = doSomethingAsync();
+    promise.then(function() {
+        somethingComplicated();
+    });
+
+    return promise;
+}</code></pre>
+<pre class="fragment"><code class="js">
+  function anAsyncCall() {
+      var promise = doSomethingAsync();
+      return promise.then(function() {
+          somethingComplicated()
+      });
+  }
+}</code></pre>
+<h2 class="fragment"> Broken Chain</h2>
+              </section>
+              <section>
+                <h1>Anti-patterns</h1>
+                <pre><code class="js">somethingAsync.then(
+    function() {
+        return somethingElseAsync();
+    },
+    function(err) {
+        handleMyError(err);
+});</code></pre>
+<pre class="fragment"><code class="js">somethingAsync
+    .then(function() {
+        return somethingElseAsync();
+    })
+    .catch(function(err) {
+        handleMyError(err);
+    });</code></pre>
+<h2 class="fragment"> Keen Error Handler</h2>
+</section>
+<section>
+  <h1>Anti-patterns</h1>
+  <pre><code class="js">var promise;
+if (asyncCallNeeded)
+  promise = doSomethingAsync();
+else
+  promise = $q.when(42);
+
+promise.then(function() {
+  doSomethingCool();
+});</code></pre>
+<pre class="fragment"><code class="js">$q.when(asyncCallNeeded ? doSomethingAsync() : 42)
+  .then(function(value){
+    doSomethingGood();
+  })
+  .catch(function(err) {
+    handleTheError();
+  });
+}</code></pre>
+<h2 class="fragment"> The Ghost Promise</h2>
+</section>
+<section>
+  <h1>Anti-patterns</h1>
+  <pre><code class="js">var deferred = $q.defer();
+doSomethingAsync().then(function(res) {
+    res = manipulateMeInSomeWay(res);
+    deferred.resolve(res);
+}, function(err) {
+    deferred.reject(err);
+});
+
+return deferred.promise;</code></pre>
+<pre class="fragment"><code class="js">return doSomethingAsync().then(function(res) {
+    return manipulateMeInSomeWay(res);
+});</code></pre>
+<h2 class="fragment"> The Forgotten Promise</h2>
+</section>
+              <section>
+                <h1>$http</h1>
+                <pre><code class="javascript" contentEditable="true">var config = {
+  method: 'GET',
+  url: '/someUrl',
+  params: {query: 'star wars'},
+  data: {user: 'pepe'}
+  headers: {'Application-Id': 'fdkjshagfkjhasdgfqwybbsdf'},
+  timeout: 1000, // response status will be -1
+  cache: true,
+  transformRequest: transformFun,
+  transformResponse: transformFun2
+};
+
+$http(config).then(function successCallback(response) {
+    // this callback will be called asynchronously
+    // when the response is available
+  }, function errorCallback(response) {
+    // called asynchronously if an error occurs
+    // or server returns response with an error status.
+  });</code></pre>
+              </section>
+              <section>
+                <h1>$httpProvider</h1>
+                <p>
+                  set default values for <code>$http</code>
+                </p>
+                <pre>
+                  <code class="js">$httpProvider.defaults.headers.common = {
+    'X-App': 'AngularJs'
+    };
+$httpProvider.defaults.headers.put = {...};
+$httpProvider.defaults.cache = true;
+$httpProvider.useApplyAsync(true);
+</code></pre>
+              </section>
+
+              <section>
+                <h1>Cache</h1>
+                <ul>
+                  <li>Caching everything, </li>
+                  <li>Cache some responses</li>
+                  <li>Use different caches</li>
+                </ul>
+                <pre><code class="js">$http.defaults.cache = true;
+$http.get('/api/random/slow', {cache: true});</code></pre>
+              </section>
+              <section>
+                <h1>Cache</h1>
+                <ul>
+                  <li>cache all requests GET and JSONP</li>
+                  <li>cache-control: not used</li>
+                  <li>key is the querystring plus params</li>
+                </ul>
+              </section>
+              <section>
+                <h1>Setting headers</h1>
+                <ul>
+                  <li>At config: <code class="js">$httpProvider.defaults.headers</code></li>
+                  <li>At runtime: <code class="js">$http.defaults.headers</code></li>
+                  <li>At request: <code class="js">$http({headers: {} })</code></li>
+                  <li>Remove a default header: set to undefined</li>
+                </ul>
+              </section>
+              <section>
+                <h1>Exercise</h1>
+                <p>
+                  Modify randomService so when it receives a 401 on the getRandom request (endpoint: /api/random/fast) so it Authorizes via HTTP Basic Authentication user: test password: 123456</p>
+                    <pre class="fragment">
+Example
+                      <code>Authorization: Basic QWxhZGRpbjpPcGVuU2VzYW1l</code>
+                      <code>QWxhZGRpbjpPcGVuU2VzYW1l is base64 encoding of user:passwd </code>
+                    </pre>
+
+              </section>
+              <section>
+                <h1>Transformations</h1>
+                <p>
+                  Pipeline to transform requests and responses data and headers
+                </p>
+                <ul>
+                  <li><a href="https://github.com/johngeorgewright/angular-xml">XML Parsing </a></li>
+                  <li>JSON or Key Value serialization(PHP) <a href="http://www.bennadel.com/blog/2615-posting-form-data-with-http-in-angularjs.htm">Sending Form data</a></li>
+                </ul>
+              </section>
+              <section>
+                <h1>Transformations defaults</h1>
+                <ul>
+                  <li>request if data is object serialize it into JSON format.</li>
+                  <li>response: If XSRF prefix is detected, strip it.</li>
+                  <li>response: If JSON response is detected, deserialize it using a JSON parser.</li>
+                </ul>
+              </section>
+                <section>
+                  <h1>Interceptors</h1>
+                  <p>
+                    pre processing of requests and responses, injectable services and factories.
+                    Free to modify the response or request config. could return a promise
+                  </p>
+                  <pre>
+                    <code class="js">module.factory('interceptor', function($log) {
+    $log.debug('$log is here to show you that this is a regular factory with injection');
+
+    var myInterceptor = {
+      response: function () {},
+      responseError: function () {},
+        ....
+        ....
+    };
+    return myInterceptor;
+});
+                    </code>
+                  </pre>
+                </section>
+                <section>
+                  <h1>Interceptor</h1>
+                  <ul>
+                    <li>request</li>
+                    <li>requestError</li>
+                    <li>response</li>
+                    <li>responseError</li>
+                  </ul>
+                  <pre>
+                    <code class="js">module.config(['$httpProvider', function($httpProvider) {
+      $httpProvider.interceptors.push('myInterceptor');
+  }]);</code>
+                  </pre>
+                </section>
+              <section>
+                <h1>Interceptors</h1>
+                <ul>
+                  <li>Session</li>
+                  <li>Session recovery</li>
+                  <li>Embeding status code - REST enveloping <a href="http://thecodebarbarian.com/2015/01/24/angularjs-interceptors">Enveloping</a></li>
+                  <li>General error handling</li>
+                  <li>General timeout handling</li>
+                </ul>
+              </section>
+
+            </section>
 
             </div>
         </div>
