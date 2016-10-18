@@ -1208,57 +1208,6 @@ Example
                 </ul>
               </section>
               <section>
-                <h1>angular-mocks</h1>
-                <p>
-                  A module that facilitates mocking in unit tests.
-                </p>
-                <ul>
-                  <li>angular.mock.module</li>
-                  <li>angular.mock.inject</li>
-                </ul>
-              </section>
-              <section>
-                <h1>module()</h1>
-                <ul>
-                  <li>called with a string</li>
-                  <li>called with a <code>function($provide){}</code></li>
-                  <li>called with <code>{value: value}</code></li>
-                </ul>
-                <pre><code class="js">describe('MyApp', function() {
-
-  // You need to load modules that you want to test,
-  // it loads only the "ng" module by default.
-  beforeEach(module('myApplicationModule'));
-  module(function($provide) {
-        $provide.value('version', 'overridden'); // override version here
-      });
-    });
-</code></pre>
-              </section>
-              <section>
-                <h1>inject()</h1>
-                <p>
-                  injects components into the function parameter
-                </p>
-                <pre><code class="js">var myService;
-
-// Wrap the parameter in underscores
-beforeEach( inject( function(_myService_){
-  myService = _myService_;
-}));
-
-// Use myService in a series of tests.
-it('makes use of myService', function() {
-  myService.doStuff();
-});</code></pre>
-              </section>
-              <section>
-                <h1>$httpBackend</h1>
-              </section>
-              <section>
-                <h1>tzDate</h1>
-              </section>
-              <section>
                 <h1>Mocha Chai Sinon</h1>
                 <img src="img/mocja.svg" height="150px" alt="" /> <img src="img/chai-logo.png"  height="150px" alt="" />
                 <pre><code class="js">describe('Array', function() {
@@ -1305,19 +1254,130 @@ expect(tea).to.have.been.equal('flavors').and.have.a.length.of(3);
 </code></pre>
               </section>
               <section>
-                <h1>Sinon</h1>
+                <h1>angular-mocks</h1>
+                <p>
+                  ngMock, A module that facilitates mocking in unit tests.
+                </p>
                 <ul>
-                  <li>spies</li>
-                  <li>stubs</li>
+                  <li>angular.mock.module</li>
+                  <li>angular.mock.inject</li>
+                  <li>$httpBackend</li>
+                  <li>tzDate</li>
+                  <li>Mock implementation of common services ($log, $interval, $timeout, $controller, etc)</li>
                 </ul>
               </section>
               <section>
-                <h1>Env Setup</h1>
-                <pre><code>
-npm install -g karma-cli
-npm install karma-mocha karma-chrome-launcher karma-phantomjs-launcher --save-dev
-                </code>
-                </pre>
+                <h1>module()</h1>
+                <ul>
+                  <li>called with a string</li>
+                  <li>called with a <code>function($provide){}</code></li>
+                  <li>called with <code>{value: value}</code></li>
+                </ul>
+                <pre><code class="js">describe('MyApp', function() {
+
+  // You need to load modules that you want to test,
+  // it loads only the "ng" module by default.
+  beforeEach(module('myApplicationModule'));
+  beforeEach(module(function($provide) {
+        $provide.value('version', 'overridden'); // override version here
+      });
+    }));
+</code></pre>
+              </section>
+              <section>
+                <h1>inject()</h1>
+                <p>
+                  injects components into the function parameter
+                </p>
+                <pre><code class="js">var myService;
+
+// Wrap the parameter in underscores
+beforeEach( inject( function(_myService_){
+  myService = _myService_;
+}));
+
+// Use myService in a series of tests.
+it('makes use of myService', function() {
+  myService.doStuff();
+});</code></pre>
+              </section>
+
+              <section>
+                <h1>Testing a $filter</h1>
+                <p>
+                  Easiest case since filters should not have <a href="https://en.wikipedia.org/wiki/Side_effect_(computer_science)">side effects</a>
+                </p>
+                <pre><code class="js">describe('Filter: words', function() {
+    'use strict';
+   var filter;
+   // Refresh the $filter every time.
+   beforeEach(module('common-filters')); // load the module
+   beforeEach(inject(function(_$filter_) { // inject filter
+       filter = _$filter_;
+        })
+    );
+
+   it('should return array of words', function() {
+     expect(filter('words')('one two three')).to.deep.equal(['one', 'two', 'three']);
+   });
+   it('should return empty array', function() {
+     expect(filter('words')('')).to.equal('');
+   });
+});</code></pre>
+              </section>
+              <section>
+                <h1>Testing a $controller</h1>
+                <pre><code class="js">describe('Controller: todo-list', function() {
+    'use strict';
+   var controller,
+        scope;
+   // Refresh the $filter every time.
+   beforeEach(module('todoListControllerDemo'));
+   beforeEach(inject(function(_$rootScope_, $controller) {
+       scope = _$rootScope_.$new();
+       controller = $controller('TodoListController',
+        {$scope: scope});
+        })
+    );
+
+    it('should start empty', function() {
+        expect(controller.list.length).to.equal(0);
+    });
+
+   it('should add items', function() {
+       controller.itemText = 'First item';
+       controller.add(controller.itemText);
+       expect(controller.list.length).to.equal(1);
+       controller.itemText = 'Second item';
+       controller.add(controller.itemText);
+       expect(controller.list.length).to.equal(2);
+       controller.remove(1);
+       expect(controller.list.length).to.equal(1);
+   });
+
+});
+</code></pre>
+              </section>
+              <section>
+                <h1>                  <img src="img/karma.png" alt="karma logo" />
+</h1>
+                <p>
+                  Test runner
+                </p>
+                <ul>
+                  <li>generate index.html with files</li>
+                  <li>Run browser(s) in background</li>
+                  <li>Run tests</li>
+                  <li>Collect and present results</li>
+                </ul>
+                <p>
+                  Available for Chrome and Chrome Canary, Firefox, Safari, PhantomJS, Opera, IE, etc
+                </p>
+              </section>
+              <section>
+                <h1>Karma</h1>
+                <pre><code>npm install -g karma-cli
+npm install karma-mocha karma-chrome-launcher karma-phantomjs-launcher --save-dev</code></pre>
                 <p>
                   Create karma.conf.js in the root of your project
                 </p>
@@ -1343,10 +1403,475 @@ module.exports = function(config) {
       }
     }
   });
-};</code>
-                </pre>
+};</code></pre>
               </section>
+              <section>
+                <h1>Code Coverage with istanbul</h1>
+                <pre><code class="bash">npm install karma karma-coverage --save-dev</code></pre>
+                <pre><code class="js">// karma.conf.js
+module.exports = function(config) {
+  config.set({
+    files: [
+      'src/**/*.js',
+      'test/**/*.js'
+    ],
+
+    // coverage reporter generates the coverage
+    reporters: ['progress', 'coverage'],
+
+    preprocessors: {
+      // source files, that you wanna generate coverage for
+      // do not include tests or libraries
+      // (these files will be instrumented by Istanbul)
+      'src/**/*.js': ['coverage']
+    },
+
+    // optionally, configure the reporter
+    coverageReporter: {
+      type : 'html',
+      dir : 'coverage/'
+    }
+  });
+};</code></pre>
+              </section>
+              <section>
+                <h1>Mocha + Chai vs Jasmine</h1>
+                <ul>
+                  <li>Jasmine has almost everything builtin</li>
+                  <li>Mocha uses a modular approach</li>
+                  <li>describe, it, async API is the same</li>
+                  <li>Variation in some precondition methods</li>
+                  <li>Variation in some assertions, and expectations</li>
+                  <li>Mocha includes a test runner, Jasmine not</li>
+                </ul>
+              </section>
+              <section>
+                <h1>Exercise</h1>
+                <ol>
+                  <li>Create a test for the titleCase filter</li>
+                  <li>Create a test for the search-page.controller.js</li>
+                </ol>
+                <p>
+                  Both in <a href="https://github.com/aotaduy/angular-example">angular-example</a> repo.
+                </p>
+              </section>
+
+              <section>
+                <h1>$httpBackend</h1>
+                <ul>
+                  <li>Create definitions with <code>whenGET().respond()</code></li>
+                  <li>Create expectations with <code>expectGET().respond()</code></li>
+                  <li><code> flush()</code> to remove async responses an ease test writing</li>
+                  <li>Verifiy postconditions, <code>verifyNoOutstandingRequest</code>, <code>verifyNoOutstandingExpectation</code></li>
+                  <li>Match regular expressions for routes and querystring parameters</li>
+                </ul>
+              </section>
+
+              <section>
+                <h1>Testing a service with http communication</h1>
+                <pre><code class="js">describe('Service: moviesConnector', function() {
+    'use strict';
+   var
+        service,
+       $httpBackend;
+
+   // Refresh the $filter every time.
+   beforeEach(module('movies.connector'));
+   beforeEach(inject(function (_$httpBackend_, _moviesConnector_) {
+     $httpBackend = _$httpBackend_;
+     $httpBackend.whenGET('/api/movies/search/star')
+       .respond({
+           results:[
+               {title: 'Star Wars'},
+               {title: 'Star Trek'}
+           ]
+       });
+       $httpBackend.whenGET('/api/movies/playing/')
+         .respond({
+             results:[
+                 {title: 'Deadpool'},
+                 {title: 'Superman'}
+             ]
+         });
+         $httpBackend.whenGET('/api/movies/')
+           .respond({
+               results:[
+                   {title: 'Deadpool'},
+                   {title: 'Superman'}
+               ]
+           });
+       service = _moviesConnector_;
+   }));
+
+   afterEach(function () {
+     $httpBackend.verifyNoOutstandingRequest();
+   });
+
+    it('should get nowPlaying movies', function() {
+        service.nowPlaying().then(function (result) {
+          expect(result.data.results[0].title).to.equal('Deadpool');
+        });
+        $httpBackend.flush();
+    });
+
+
+    it('should get nowPlaying movies', function() {
+      $httpBackend.expectGET('/api/movies/playing/')
+        .respond({
+            results:[
+                {title: 'Deadpool'}
+            ]
+        });
+        service.nowPlaying();
+        $httpBackend.flush();
+    });
+
+    it('should get nowPlaying movies and top rated', function() {
+      $httpBackend.expectGET('/api/movies/playing/')
+        .respond({
+            results:[
+                {title: 'Deadpool'}
+            ]
+        });
+        service.nowPlaying();
+        service.topRatedMovies();
+        $httpBackend.flush();
+    });
+    it('should search', function() {
+      $httpBackend.expect('GET', /api\/movies\/search\/.*/ )
+        .respond({
+            results:[
+                {title: 'Deadpool'},
+                {title: 'Star wars'},
+                {title: 'Star trek'}
+            ]
+        });
+        service.search('peperino');
+        $httpBackend.flush();
+    });
+});
+</code></pre>
+              </section>
+              <section>
+                <h1>Testing async code</h1>
+<pre><code class="javascript">it('should getRandomNumberDeferred', function(done) {
+      service.getRandomDeferred().then(function (response) {
+        expect(response).to.equal((0.7).toFixed(3));
+        done();
+      });
+      service.getRandomDeferred().then(function (response) {
+        done();
+      });
+      $timeout.flush();
+      $rootScope.$digest();
+});</code></pre>
+              </section>
+
+
+              <section>
+                <h1>Testing directives</h1>
+                <pre><code class="js">describe('ngClick', function() {
+  var element;
+
+  afterEach(function() {
+    dealoc(element);
+  });
+
+  it('should get called on a click', inject(function($rootScope, $compile) {
+    element = $compile('<div ng-click="clicked = true"></div>')($rootScope);
+    $rootScope.$digest();
+    expect($rootScope.clicked).toBeFalsy();
+
+    browserTrigger(element, 'click');
+    expect($rootScope.clicked).toEqual(true);
+  }));
+
+  it('should pass event object', inject(function($rootScope, $compile) {
+    element = $compile('<div ng-click="event = $event"></div>')($rootScope);
+    $rootScope.$digest();
+
+    browserTrigger(element, 'click');
+    expect($rootScope.event).toBeDefined();
+  }));
+});
+</code></pre>
+              </section>
+
+              <section>
+                <h1>Sinon</h1>
+                <ul>
+                  <li>spies</li>
+                  <li>stubs</li>
+                  <li>mocks</li>
+                </ul>
+              </section>
+              <section>
+                <h1>Sinon spies</h1>
+                <p>
+                  A spy is a function that records the calls and return values.
+                </p>
+                <pre><code class="js">"test should call subscribers on publish": function () {
+    var callback = sinon.spy();
+    PubSub.subscribe("message", callback);
+
+    PubSub.publishSync("message");
+
+    assertTrue(callback.called);
+}</code></pre>
+              </section>
+              <section>
+                <h1>Sinon stubs</h1>
+                <p>
+                  a stub is a function with pre trained behaviour
+                </p>
+                <pre><code class="js">    it('should getRandom', function() {
+        sinon.stub(service, 'getRandom');
+        service.getRandom.onCall(0).returns($q.when(0.2));
+        service.getRandom.onCall(1).returns($q.when(0.3));
+        controller.updateNextRandom();
+        $rootScope.$digest();
+        expect(controller.messageHistory).to.equal('0.2\n');
+        controller.updateNextRandom();
+        $rootScope.$digest();
+        expect(controller.messageHistory).to.equal('0.2\n0.3\n');
+        service.getRandom.restore();
+    });</code></pre>
+              </section>
+              <section>
+                <h1>Sinon Mocks</h1>
+                <p>
+                  Mocks are stubs or spies that you can verify on
+                </p>
+                <pre><code class="js">    it('should getRandomLocal mock', function() {
+        var mock = sinon.mock(Math);
+        mock.expects('random').once();
+        controller.updateNextRandomLocal();
+        $rootScope.$digest();
+        mock.verify();
+        mock.restore();
+    });</code></pre>
+              </section>
+              <section>
+                <h1>Exercise</h1>
+                <p>
+                  Create a unit test for the search directive (client/app/components/search-box) in <a href="https://github.com/aotaduy/angular-example">angular-example</a>
+                </p>
+              </section>
+
+
             </section>
+            <section>
+              <section>
+                <h1>Angular 2 Intro</h1>
+                <ul>
+                  <li>TypeScript -> ES6</li>
+                  <li>Modules Ng and ES6</li>
+                  <li>Components</li>
+                  <li>Templates</li>
+                  <li>Bootstraping</li>
+                  <li>Data Binding</li>
+                  <li>Directives</li>
+                  <li>Services</li>
+                  <li>HTTP</li>
+                </ul>
+              </section>
+              <section>
+                <h1>Angular 2 Pros</h1>
+                <ul>
+                  <li>TypeScript and ES6</li>
+                  <li>Component Architecture</li>
+                  <li>Modularity (ES6)</li>
+                  <li>RxJs</li>
+                  <li>Performance</li>
+                  <li>Simpler Architecture</li>
+                  <li>Modular CSS</li>
+                </ul>
+              </section>
+              <section>
+                <h1>Angular 2 Cons</h1>
+                <ul>
+                  <li>Not Yet Released (2016/09)</li>
+                  <li>TypeScript</li>
+                  <li>Lot of Changes</li>
+                  <li>Complexity</li>
+                  <li>Template Syntax</li>
+                  <li>Removed $scope</li>
+                  <li>Better change detection</li>
+                </ul>
+              </section>
+              <section>
+                <h1>Architecture</h1>
+                <img src="img/ng2-architecture.png" alt="" />
+              </section>
+              <section>
+                <h1>Components</h1>
+                <ul>
+                  <li>Defined as annotated class</li>
+                  <li>Instance bound to template</li>
+                  <li>Explicit dependencies</li>
+                  <li>stylesheets</li>
+                  <li>Uses Shadow Dom</li>
+                  <li>Lyfecycle hooks</li>
+                </ul>
+              </section>
+              <section>
+                <h1>Component Syntax</h1>
+                <pre><code class="ts">import { Component } from '@angular/core';
+import {TodoItem} from './todo-item'
+
+@Component({
+  selector: 'app-root',
+  templateUrl: 'app.component.html',
+  styleUrls: ['app.component.css']
+})
+export class AppComponent {
+  title = 'app works!';
+  list: Array&lt;TodoItem&gt;;
+  item: TodoItem;
+
+  constructor() {
+    this.list = [];
+    this.item = new TodoItem;
+  }
+
+  add( anItem: TodoItem) {
+    this.list.push(anItem);
+    this.item = new TodoItem;
+  }
+
+  remove( index: number) {
+    this.list.splice(index,1);
+  }
+}</code></pre>
+              </section>
+              <section>
+                <h1>Templates</h1>
+<pre><code class="html">
+&lt;h1 [ngClass]=&quot;{&apos;big&apos;: list.length &gt; 5}&quot; &gt;Todo {{list.length}}&lt;/h1&gt;&#10;  &lt;input type=&quot;text&quot; [(ngModel)]=&quot;item.text&quot;&gt;&#10;  &lt;input type=&quot;button&quot;  value=&quot;Add&quot; (click)=&quot;add(item)&quot;&gt;&#10;  &lt;ul&gt;&#10;    &lt;li&#10;    [ngClass]=&quot;{&apos;done&apos;: todoItem.done}&quot; \&#10;    *ngFor=&quot;let todoItem of list; let i = index&quot;&gt;&#10;      &lt;input type=&quot;checkbox&quot; [(ngModel)]=&quot;todoItem.done&quot;&gt;&#10;        {{todoItem.text}}&#10;        &lt;input&#10;          *ngIf=&quot;todoItem.done&quot;&#10;          (click)=&quot;remove(i)&quot;&#10;          type=&quot;button&quot;&#10;          name=&quot;name&quot;&#10;          value=&quot;X&quot;&gt;&#10;      &lt;/li&gt;&#10;  &lt;/ul&gt;
+</code></pre>
+              </section>
+              <section>
+                <h1>Template elements</h1>
+                <ul>
+                  <li> DOM Property and events not HTML Attributes</li>
+                  <li>bindings {{}} no side efects: Expression</li>
+                  <li>attribute []</li>
+                  <li>events (): Statements $event available</li>
+                  <li>Two Way [()]</li>
+                  <li>Directives</li>
+                  <li>Components</li>
+                  <li>Pipes</li>
+                </ul>
+              </section>
+              <section>
+                <h1>{{Template Expression}}</h1>
+                <ul>
+                  <li>no side effects =, new, ++ ;</li>
+                  <li>scope is coponent instance</li>
+                  <li>no global namespace</li>
+                  <li>Quick</li>
+                  <li>Simplicity</li>
+                  <li>Idempotent </li>
+                </ul>
+                <h2>Template Statements</h2>
+              </section>
+
+              <section>
+                <h1>Attribute, Class and Style bindings</h1>
+                <pre><code class="js">&lt;table border=1&gt;&#10;  &lt;!--  expression calculates colspan=2 --&gt;&#10;  &lt;tr&gt;&lt;td [attr.colspan]=&quot;1 + 1&quot;&gt;One-Two&lt;/td&gt;&lt;/tr&gt;&#10;&#10;  &lt;!-- ERROR: There is no `colspan` property to set!&#10;    &lt;tr&gt;&lt;td colspan=&quot;{{1 + 1}}&quot;&gt;Three-Four&lt;/td&gt;&lt;/tr&gt;&#10;  --&gt;&#10;&#10;  &lt;tr&gt;&lt;td&gt;Five&lt;/td&gt;&lt;td&gt;Six&lt;/td&gt;&lt;/tr&gt;&#10;&lt;/table&gt;</code></pre>
+              </section>
+            <section>
+              <h1>Class Binding</h1>
+              <pre><code class="html">&lt;!-- toggle the &quot;special&quot; class on/off with a property --&gt;&#10;&lt;div [class.special]=&quot;isSpecial&quot;&gt;The class binding is special&lt;/div&gt;&#10;&#10;&lt;!-- binding to `class.special` trumps the class attribute --&gt;&#10;&lt;div class=&quot;special&quot;&#10;     [class.special]=&quot;!isSpecial&quot;&gt;This one is not so special&lt;/div&gt;&#10;</code></pre>
+            </section>
+            <section>
+              <h1>Style Binding</h1>
+              <pre><code class="html">&lt;button [style.color] = &quot;isSpecial ? &apos;red&apos;: &apos;green&apos;&quot;&gt;Red&lt;/button&gt;&#10;&lt;button [style.background-color]=&quot;canSave ? &apos;cyan&apos;: &apos;grey&apos;&quot; &gt;Save&lt;/button&gt;&#10;&lt;button [style.font-size.em]=&quot;isSpecial ? 3 : 1&quot; &gt;Big&lt;/button&gt;&#10;&lt;button [style.font-size.%]=&quot;!isSpecial ? 150 : 50&quot; &gt;Small&lt;/button&gt;
+</code></pre>
+            </section>
+            <section>
+              <h1>Built in directives</h1>
+              <ul>
+                <li>Many not needed</li>
+                <li>NgClass, NGStyle</li>
+                <li>*NgId *NgFor *NgSwitch</li>
+              </ul>
+            </section>
+            <section>
+              <h1>Template reference Variables</h1>
+              <pre><code class="html">
+&lt;!-- phone refers to the input element; pass its `value` to an event handler --&gt;&#10;  &lt;input #phone placeholder=&quot;phone number&quot;&gt;&#10;  &lt;button (click)=&quot;callPhone(phone.value)&quot;&gt;Call&lt;/button&gt;&#10;&#10;  &lt;!-- fax refers to the input element; pass its `value` to an event handler --&gt;&#10;  &lt;input ref-fax placeholder=&quot;fax number&quot;&gt;&#10;  &lt;button (click)=&quot;callFax(fax.value)&quot;&gt;Fax&lt;/button&gt;&#10;</code></pre>
+            </section>
+            <section>
+              <h1>Modules and NgModule</h1>
+              <pre><code class="js">export class ZipCodeValidator implements StringValidator {
+    isAcceptable(s: string) {
+        return s.length === 5 && numberRegexp.test(s);
+    }
+}</code></pre>
+<pre><code class="js">import { ZipCodeValidator } from "./ZipCodeValidator";
+
+let myValidator = new ZipCodeValidator();</code></pre>
+<pre><code class="js"> NgModule(options : {&#10;constructor(options?: NgModuleMetadataType)&#10;providers : Provider[]&#10;declarations : Array&lt;Type&lt;any&gt;|any[]&gt;&#10;imports : Array&lt;Type&lt;any&gt;|ModuleWithProviders|any[]&gt;&#10;exports : Array&lt;Type&lt;any&gt;|any[]&gt;&#10;entryComponents : Array&lt;Type&lt;any&gt;|any[]&gt;&#10;bootstrap : Array&lt;Type&lt;any&gt;|any[]&gt;&#10;schemas : Array&lt;SchemaMetadata|any[]&gt;&#10;}) </code></pre>
+            </section>
+            <section>
+              <h1>Subcomponents Input and Output</h1>
+              <pre><code class="js">import { Component, Input, Output, EventEmitter } from '@angular/core';
+
+import {TodoItem} from './todo-item';
+
+@Component({
+    selector: 'todo-line',
+    template: `
+    &lt;input type=&quot;checkbox&quot; [(ngModel)]=&quot;item.done&quot;&gt;&#10;      {{item.text}}&#10;      &lt;input type=&quot;button&quot; name=&quot;name&quot; value=&quot;X&quot; (click)=&quot;remove(item)&quot;&gt;
+`
+})
+export class TodoLine {
+  @Input() item: TodoItem;
+  @Output() removeRequested: EventEmitter<any> = new EventEmitter();
+
+  remove( index: number) {
+    this.removeRequested.emit(this.item)
+  }
+}</code></pre>
+            </section>
+            <section>
+              <h1>Exercise</h1>
+              <p>
+                Create a CRUD app for users, with login, email and  password.
+                Create a component for the form and other for the list with the form.
+              </p>
+            </section>
+            <section>
+              <h1>Routing</h1>
+              <p>
+                WIP!
+              </p>
+            </section>
+            <section>
+              <h1>Angular2 Services</h1>
+              <ul>
+                <li>Dependency Injection</li>
+                <li>Http RxJs</li>
+                <li>Singleton depends on declaration</li>
+              </ul>
+            </section>
+            <section>
+              <h1>Bootstraping</h1>
+              <pre><code class="js">import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+
+import { AppModule } from './app.module';
+
+platformBrowserDynamic().bootstrapModule(AppModule);</code></pre>
+            </section>
+            </section>
+            </div>
+            <div class="footer">
+              <a href="https://github.com/aotaduy"></a>
+              <span>Ing. Andres Otaduy</span>
+             - Angular Advanced
+
+
             </div>
         </div>
 
